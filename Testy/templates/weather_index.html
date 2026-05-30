@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Погода в России</title>
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='favicons/favicon-weather.svg') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background: #111;
+        }
+
+        .video-bg { position: fixed; inset: 0; z-index: -1; }
+        .video-bg video { width: 100%; height: 100%; object-fit: cover; }
+
+        .weather-card {
+            background: rgba(255,255,255,0.82);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+            padding: 30px;
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        h1 { color: #2c3e50; font-size: clamp(1.3rem, 4vw, 1.8rem); margin-bottom: 20px; }
+
+        .search-container { display: flex; gap: 10px; margin-bottom: 20px; }
+
+        .search-input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid rgba(0,0,0,0.15);
+            background: rgba(255,255,255,0.6);
+            border-radius: 10px;
+            font-size: 15px;
+            outline: none;
+            font-family: inherit;
+            min-width: 0;
+        }
+
+        .search-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 0 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 15px;
+            white-space: nowrap;
+            transition: background 0.2s;
+        }
+
+        .search-btn:hover { background: #2980b9; }
+
+        .cities-title {
+            text-align: left;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 16px;
+            font-weight: 700;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 5px;
+        }
+
+        .cities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 8px;
+            max-height: 320px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            padding-right: 4px;
+        }
+
+        .city-link {
+            text-decoration: none;
+            background: rgba(255,255,255,0.5);
+            color: #2c3e50;
+            padding: 10px 8px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.4);
+            transition: all 0.2s;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .city-link:hover { background: #3498db; color: white; transform: translateY(-2px); }
+
+        .back-link {
+            text-decoration: none;
+            color: #2980b9;
+            font-weight: bold;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: opacity 0.2s;
+        }
+
+        .back-link:hover { opacity: 0.7; }
+
+        .cities-grid::-webkit-scrollbar { width: 5px; }
+        .cities-grid::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); border-radius: 10px; }
+
+        @media (max-width: 480px) {
+            .weather-card { padding: 20px 16px; }
+            .cities-grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); max-height: 260px; }
+            .search-btn { padding: 0 12px; font-size: 14px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="video-bg">
+        <video autoplay muted loop playsinline>
+            <source src="{{ url_for('static', filename='images/' + bg_video) }}" type="video/mp4">
+        </video>
+    </div>
+
+    <div class="weather-card">
+        <h1>Погода в России</h1>
+
+        <form onsubmit="handleSearch(event)" class="search-container">
+            <input type="text" id="city-input" list="russian-cities" class="search-input" placeholder="Поиск города..." autocomplete="off" required>
+            <datalist id="russian-cities">
+                {% for city_name in cities.keys()|sort %}
+                    <option value="{{ city_name }}">
+                {% endfor %}
+            </datalist>
+            <button type="submit" class="search-btn">Найти</button>
+        </form>
+
+        <div class="cities-title">Список городов (А-Я):</div>
+        <div class="cities-grid">
+            {% for city_name in cities.keys()|sort %}
+                <a href="{{ url_for('weather.weather', city=city_name|lower) }}" class="city-link" title="{{ city_name }}">
+                    {{ city_name }}
+                </a>
+            {% endfor %}
+        </div>
+
+        <a href="{{ url_for('home') }}" class="back-link">← Вернуться в кабинет</a>
+    </div>
+
+    <script>
+        function handleSearch(event) {
+            event.preventDefault();
+            const val = document.getElementById('city-input').value.trim();
+            if (val) window.location.href = "{{ url_for('weather.index') }}" + encodeURIComponent(val.toLowerCase());
+        }
+    </script>
+</body>
+</html>

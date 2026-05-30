@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Главная страница</title>
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='favicons/favicon-index.svg') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main_site.css') }}">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Montserrat', sans-serif;
+            background: #000;
+            padding: 20px;
+        }
+
+        .video-bg { position: fixed; inset: 0; z-index: -1; }
+        .video-bg video { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.3) saturate(0.5); }
+        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.45); backdrop-filter: blur(4px); z-index: 0; }
+
+        .glass-container {
+            position: relative;
+            z-index: 10;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 24px;
+            padding: 50px 45px;
+            width: 100%;
+            max-width: 480px;
+            text-align: center;
+            color: #fff;
+        }
+
+        .glass-nav {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px 24px;
+            margin-bottom: 40px;
+        }
+
+        .glass-nav a {
+            color: #555;
+            text-decoration: none;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            transition: color 0.3s;
+        }
+
+        .glass-nav a.active,
+        .glass-nav a:hover { color: #fff; }
+
+        .glass-nav a[href="/logout"] { color: #ff5f56 !important; }
+
+        .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.2);
+            margin: 0 auto 20px;
+        }
+
+        h1 { font-weight: 400; font-size: 1.7rem; margin-bottom: 8px; }
+
+        .role-badge {
+            font-size: 0.75rem;
+            color: #aaa;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 16px;
+        }
+
+        .desc { color: rgba(255,255,255,0.7); line-height: 1.6; margin-bottom: 30px; font-size: 0.95rem; }
+
+        .btn-row {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .cta-button {
+            text-decoration: none;
+            display: inline-block;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 0.9rem;
+            font-weight: 500;
+            background: #fff;
+            color: #000;
+            transition: opacity 0.3s;
+        }
+
+        .cta-button.secondary {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: #fff;
+        }
+
+        .cta-button:hover { opacity: 0.8; }
+
+        @media (max-width: 480px) {
+            .glass-container { padding: 35px 22px; }
+            h1 { font-size: 1.4rem; }
+            .btn-row { flex-direction: column; align-items: center; }
+            .cta-button { width: 100%; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+    <div class="video-bg">
+        <video autoplay muted loop playsinline>
+            <source src="{{ url_for('static', filename='images/main-bg.mp4') }}" type="video/mp4">
+        </video>
+    </div>
+    <div class="overlay"></div>
+
+    <div class="glass-container fade-in">
+        <nav class="glass-nav">
+            <a href="/" class="active">Главная</a>
+            <a href="{{ url_for('weather.index') }}">Погода</a>
+            {% if role == 'admin' %}
+                <a href="/skills">Стек</a>
+            {% endif %}
+            <a href="/contact">Связь</a>
+            <a href="/logout">Выйти</a>
+        </nav>
+
+        <div class="avatar"></div>
+        <h1>Привет, {{ name }}!</h1>
+        <div class="role-badge">Доступ: {{ 'Полный' if role == 'admin' else 'Ограниченный' }}</div>
+        <p class="desc">Добро пожаловать в систему. Ваш статус: <b>{{ role }}</b></p>
+
+        <div class="btn-row">
+            <a href="/contact" class="cta-button">Написать мне</a>
+            <a href="{{ url_for('weather.index') }}" class="cta-button secondary">Погода</a>
+        </div>
+    </div>
+</body>
+</html>

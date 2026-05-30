@@ -1,0 +1,116 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    background-color: #000; /* Черный фон пока грузится видео */
+    overflow: hidden;
+}
+
+/* ВИДЕОФОН */
+.video-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1; /* Убедись, что z-index отрицательный */
+    pointer-events: none; /* Чтобы видео не мешало кликам */
+}
+
+#bg-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Растягиваем без искажений */
+    filter: brightness(0.4) contrast(1.2) grayscale(0.5); /* Затемнение видео */
+}
+
+/* СЛОЙ РАЗДЕЛЕНИЯ (Overlay) */
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle, transparent 20%, rgba(0, 0, 0, 0.4) 100%),
+                rgba(0, 0, 0, 0.2); /* Виньетка для глубины */
+    backdrop-filter: blur(4px); /* Размытие видео-фона */
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* ОКНО ТЕРМИНАЛА */
+.terminal-window {
+    position: relative;
+    z-index: 10;
+    width: 90%;
+    max-width: 650px;
+    background: rgba(10, 10, 10, 0.92); /* Прозрачность для стекла */
+    backdrop-filter: blur(10px); /* Стекло внутри окна */
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8),
+                0 0 20px rgba(0, 255, 65, 0.05);
+    border: 1px solid rgba(0, 255, 65, 0.2);
+}
+
+.terminal-header {
+    background: #1a1a1a;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #333;
+}
+
+.controls { display: flex; gap: 8px; }
+.dot { width: 12px; height: 12px; border-radius: 50%; }
+.red { background: #ff5f56; }
+.yellow { background: #ffbd2e; }
+.green { background: #27c93f; }
+
+.window-title { width: 100%; text-align: center; color: #666; font-size: 13px; margin-right: 40px; }
+
+.terminal-body { padding: 30px; color: #00ff41; }
+
+.console-nav {
+    margin-bottom: 25px;
+    border-bottom: 1px dashed rgba(0, 255, 65, 0.2);
+    padding-bottom: 15px;
+}
+
+.console-nav a {
+    color: #00ff41;
+    text-decoration: none;
+    margin-right: 25px;
+    font-size: 14px;
+    opacity: 0.6;
+    transition: 0.3s;
+}
+
+.console-nav a.active, .console-nav a:hover {
+    opacity: 1;
+    text-shadow: 0 0 8px #00ff41;
+}
+
+/* Эффект текста */
+.glitch-text {
+    font-size: 1.8rem;
+    color: #fff;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px rgba(0, 255, 65, 0.2);
+}
+
+.skills-log {
+    min-height: 180px;
+    line-height: 1.8;
+    color: #fff;
+    font-size: 15px;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.cursor {
+    color: #00ff41;
+    animation: blink 1s infinite;
+}
+
+@keyframes blink { 50% { opacity: 0; } }

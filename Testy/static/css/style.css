@@ -1,0 +1,176 @@
+/* Общие стили для тела страницы */
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f4f7f9;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* Стили для карточки погоды */
+.weather-card {
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    padding: 35px;
+    max-width: 480px;
+    width: 100%;
+    text-align: center;
+    transition: transform 0.2s;
+    border-left: 5px solid #4caf50; /* Зеленая линия слева */
+}
+
+.weather-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+}
+
+/* Иконка погоды */
+.weather-icon {
+    width: 140px;
+    height: 140px;
+    margin: 25px auto;
+}
+
+/* Температура (самое большое число) */
+.temp {
+    font-size: 72px;
+    font-weight: bold;
+    margin: 15px 0;
+    color: #333;
+}
+
+/* Название города */
+.city-name {
+    font-size: 36px;
+    color: #2c3e50;
+    margin-bottom: 10px;
+}
+
+/* Блок с ветром и влажностью */
+.details {
+    display: flex;
+    justify-content: space-around;
+    margin: 25px 0px 15px 0px;
+    font-size: 16px;
+}
+
+.details div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    font-weight: 500;
+    color: #333; /* Темный текст для лучшей читаемости */
+}
+
+.details i {
+    font-size: 28px;
+}
+
+/* Блок с рекомендацией по одежде */
+.recommendation {
+    background-color: #e8f5e9; /* Светло-зеленый */
+    border-left: 5px solid #4caf50; /* Акцентный зеленый */
+    padding: 18px;
+    margin-top: 25px;
+    border-radius: 8px;
+}
+
+.recommendation h3 {
+    margin-top: 0;
+    color: #2e7d32; /* Темно-зеленый */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px; /* Отступ между иконкой и текстом */
+}
+
+/* Стили для страницы ошибки */
+.error-message {
+     background-color: #ffebee; /* Светло-красный */
+     border-left: 5px solid #c62828; /* Красный */
+     padding: 18px;
+     margin-top: 25px;
+     border-radius: 8px;
+     color: #b71c1c; /* Темно-красный */
+     font-weight: bold;
+ }
+
+ /* Стили для ссылки "Назад" */
+ a.back-link {
+     display: inline-block;
+     margin-top: 25px;
+     text-decoration: none;
+     color: #2980b9; /* Синий */
+     font-weight: bold;
+     font-size: 16px;
+ }
+
+ a.back-link i {
+     margin-right: 8px; /* Отступ для иконки */
+ }
+
+ a.back-link:hover {
+     text-decoration: underline;
+ }
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 480px) {
+    body {
+        padding: 10px;
+    }
+
+    .weather-card {
+        padding: 25px;
+        border-left-width: 4px; /* Уменьшаем толщину линии на моб. */
+    }
+
+    .temp { font-size: 56px; }
+    .city-name { font-size: 28px; }
+
+    .details { font-size: 14px; margin-bottom: -10px; }
+}
+
+@media (max-width: 360px) {
+    .temp { font-size: 48px; }
+    .city-name { font-size: 24px; }
+}
+
+/* Дополнительные стили для главной страницы (список городов) */
+body.index-page ul {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 40px;
+}
+
+body.index-page li {
+    background-color: white;
+    padding: 15px 25px;
+    border-radius: 8px;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+    font-size: 18px;
+    color: #333;
+}
+
+body.index-page li.active,
+body.index-page li.selected {
+    background-color: #4caf50 !important; /* Зеленый фон для активного города */
+    color: white !important;
+    box-shadow: none !important;
+}
+
+body.index-page li.active i,
+body.index-page li.selected i {
+    color: white !important; /* Белые иконки на активном элементе */
+}

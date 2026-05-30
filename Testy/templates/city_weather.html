@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Погода в {{ city if city else 'городе' }}</title>
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='favicons/favicon-weather.svg') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background: #111;
+        }
+
+        .video-bg { position: fixed; inset: 0; z-index: -1; }
+        .video-bg video { width: 100%; height: 100%; object-fit: cover; }
+
+        .weather-card {
+            background: rgba(255,255,255,0.82);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+            padding: 35px 30px;
+            width: 100%;
+            max-width: 460px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .city-name { font-size: clamp(1.5rem, 6vw, 2rem); color: #2c3e50; }
+        .local-time { color: #666; margin: 6px 0 0; font-size: 14px; }
+
+        .weather-icon { width: 100px; height: 100px; margin: 12px auto; display: block; }
+
+        .temp { font-size: clamp(52px, 14vw, 72px); font-weight: bold; color: #222; line-height: 1; margin: 8px 0; }
+
+        .weather-desc { font-size: clamp(16px, 4vw, 22px); color: #333; font-weight: 500; text-transform: capitalize; }
+
+        .details {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            padding: 14px;
+            background: rgba(255,255,255,0.5);
+            border-radius: 14px;
+            gap: 10px;
+        }
+
+        .details div { display: flex; flex-direction: column; align-items: center; gap: 5px; font-weight: 500; color: #333; font-size: 14px; }
+        .details i { font-size: 22px; color: #3498db; }
+
+        .recommendation {
+            background: rgba(76,175,80,0.12);
+            border-left: 4px solid #4caf50;
+            padding: 16px;
+            border-radius: 10px;
+            text-align: left;
+            margin-top: 16px;
+        }
+
+        .recommendation h3 { color: #1b5e20; font-size: 16px; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+        .recommendation p { color: #111; line-height: 1.5; font-size: 14px; }
+
+        .error-message {
+            background: rgba(231,76,60,0.15);
+            border-left: 4px solid #e74c3c;
+            padding: 16px;
+            border-radius: 10px;
+            color: #c0392b;
+            font-weight: bold;
+            text-align: left;
+        }
+
+        .nav-links { margin-top: 22px; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
+
+        .back-link {
+            text-decoration: none;
+            color: #2980b9;
+            font-weight: bold;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: opacity 0.2s;
+        }
+
+        .back-link:hover { opacity: 0.7; }
+        .back-link.grey { color: #666; }
+
+        @media (max-width: 480px) {
+            .weather-card { padding: 24px 18px; }
+            .details { gap: 4px; }
+            .details div { font-size: 13px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="video-bg">
+        <video autoplay muted loop playsinline>
+            <source src="{{ url_for('static', filename='images/' + bg_video) }}" type="video/mp4">
+        </video>
+    </div>
+
+    <div class="weather-card">
+        {% if error %}
+            <div class="error-message"><i class="fas fa-exclamation-triangle"></i> {{ error }}</div>
+        {% else %}
+            <h1 class="city-name">{{ city }}</h1>
+            <p class="local-time">{{ local_time }}</p>
+
+            <img src="{{ icon_url }}" alt="Погода" class="weather-icon">
+
+            <div class="temp">{{ temp }}°C</div>
+            <div class="weather-desc">{{ weather }}</div>
+
+            <div class="details">
+                <div>
+                    <i class="fas fa-wind"></i>
+                    <span>{{ wind_speed }} км/ч</span>
+                </div>
+                <div>
+                    <i class="fas fa-tint"></i>
+                    <span>{{ humidity }}%</span>
+                </div>
+            </div>
+
+            <div class="recommendation">
+                <h3><i class="fas fa-tshirt"></i> Рекомендация</h3>
+                <p>{{ recommendation }}</p>
+            </div>
+        {% endif %}
+
+        <div class="nav-links">
+            <a href="{{ url_for('weather.index') }}" class="back-link"><i class="fas fa-list"></i> Города</a>
+            <a href="{{ url_for('home') }}" class="back-link grey"><i class="fas fa-home"></i> Кабинет</a>
+        </div>
+    </div>
+</body>
+</html>
